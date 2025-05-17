@@ -2,10 +2,28 @@ apiVersion: v1
 entries:
   loggen:
   - apiVersion: v2
+    appVersion: 0.1.1
+    created: "2025-05-17T22:16:22.70144287+02:00"
+    description: Containerized log generator application for demo purposes
+    digest: 3defe6796c059d928a976a1aa7af30ed122c3bd1b92561ca9ebdf3583b893414
+    home: https://github.com/smarlhens/python-boilerplate
+    keywords:
+    - loggen
+    - logs
+    - generator
+    maintainers:
+    - email: smainklh@gmail.com
+      name: Smana
+    name: loggen
+    type: application
+    urls:
+    - https://smana.github.io/loggen/helm/loggen/loggen-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
     appVersion: 0.1.0
-    created: "2025-05-17T19:45:27.94705309+02:00"
+    created: "2025-05-17T22:16:22.700979137+02:00"
     description: A secure, containerized log generator application.
-    digest: 7470413ee93f3f050cff84787f0bd048a3a72fffcc9207f0397d681af8b9a1b5
+    digest: 98cc9663ff02070883757cef2cca10b414f56a204b3fb99138bae248367a3009
     home: https://github.com/smarlhens/python-boilerplate
     keywords:
     - loggen
@@ -19,4 +37,4 @@ entries:
     urls:
     - https://smana.github.io/loggen/helm/loggen/loggen-0.1.0.tgz
     version: 0.1.0
-generated: "2025-05-17T19:45:27.946639722+02:00"
+generated: "2025-05-17T22:16:22.700496186+02:00"
