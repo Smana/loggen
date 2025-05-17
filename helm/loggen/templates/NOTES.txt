@@ -1,0 +1,16 @@
+Thank you for installing the loggen Helm chart!
+
+**Get pod status:**
+  kubectl get pods -l app.kubernetes.io/instance={{ .Release.Name }}
+
+**Check logs:**
+  kubectl logs -l app.kubernetes.io/instance={{ .Release.Name }}
+
+**Port-forward to access the service:**
+  kubectl port-forward svc/{{ include "loggen.fullname" . }} 8080:8080
+
+**Uninstall the release:**
+  helm uninstall {{ .Release.Name }}
+
+For more configuration options, see:
+  https://github.com/smana/loggen/tree/main/helm/loggen

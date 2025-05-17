@@ -1,0 +1,14 @@
+apiVersion: v2
+name: loggen
+version: 0.1.0
+appVersion: "0.1.0"
+description: A secure, containerized log generator application.
+type: application
+keywords:
+  - loggen
+  - logs
+  - generator
+home: https://github.com/smarlhens/python-boilerplate
+maintainers:
+  - name: Your Name
+    email: your.email@example.com
