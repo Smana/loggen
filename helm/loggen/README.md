@@ -48,7 +48,6 @@ See `values.yaml` for all configurable options, including:
 helm install loggen ./helm/loggen \
   --set replicaCount=3 \
   --set image.tag=v0.2.0 \
-  --set service.type=LoadBalancer
 ```
 
 ## Security

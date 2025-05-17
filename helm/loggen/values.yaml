@@ -1,14 +1,30 @@
+# Default values for loggen.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+args:
+  - --sleep
+  - "0.2"
+  - --error-rate
+  - "3"
+  - --format
+  - "raw"
+
+# The replica count for the loggen deployment.
 replicaCount: 1
 
+# The image to use for the loggen deployment.
 image:
   repository: ghcr.io/smana/loggen
   tag: v0.1.0
   pullPolicy: IfNotPresent
 
+# The service configuration for the loggen deployment.
 service:
   type: ClusterIP
   port: 8080
 
+# The resource limits and requests for the loggen deployment.
 resources:
   limits:
     memory: 128Mi
@@ -16,6 +32,7 @@ resources:
     cpu: 50m
     memory: 64Mi
 
+# The security context for the loggen deployment.
 securityContext:
   runAsUser: 10001
   runAsGroup: 10001
@@ -26,6 +43,7 @@ securityContext:
     drop:
       - ALL
 
+# The security context for the loggen container.
 containerSecurityContext:
   allowPrivilegeEscalation: false
   readOnlyRootFilesystem: true
@@ -33,16 +51,21 @@ containerSecurityContext:
     drop:
       - ALL
 
+# The affinity for the loggen deployment.
 affinity: {}
 
+# The tolerations for the loggen deployment.
 tolerations: []
 
+# The topology spread constraints for the loggen deployment.
 topologySpreadConstraints: []
 
+# The service account for the loggen deployment.
 serviceAccount:
   create: true
   name: ""
 
+# The pod disruption budget for the loggen deployment.
 podDisruptionBudget:
   enabled: false
   minAvailable: 1
