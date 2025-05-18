@@ -2,8 +2,26 @@ apiVersion: v1
 entries:
   loggen:
   - apiVersion: v2
+    appVersion: 0.1.3
+    created: "2025-05-18T15:54:27.687695364+02:00"
+    description: A log generator for testing and benchmarking log pipelines.
+    digest: c9307036e998fef041e99c5b24cddfde3b06914172cbfc0632f23d3a4a2c4d8d
+    home: https://github.com/Smana/loggen
+    keywords:
+    - loggen
+    - logs
+    - generator
+    maintainers:
+    - email: smainklh@gmail.com
+      name: Smana
+    name: loggen
+    type: application
+    urls:
+    - https://smana.github.io/loggen/helm/loggen/loggen-0.1.3.tgz
+    version: 0.1.3
+  - apiVersion: v2
     appVersion: 0.1.2
-    created: "2025-05-18T09:06:18.765386531+02:00"
+    created: "2025-05-18T15:54:27.687428254+02:00"
     description: Containerized log generator application for demo purposes
     digest: f67b23ccd4518daac5e5b710a65c98052c50c8529879cae5575a33e5b93066b9
     home: https://github.com/Smana/loggen
@@ -19,4 +37,40 @@ entries:
     urls:
     - https://smana.github.io/loggen/helm/loggen/loggen-0.1.2.tgz
     version: 0.1.2
-generated: "2025-05-18T09:06:18.765024074+02:00"
+  - apiVersion: v2
+    appVersion: 0.1.1
+    created: "2025-05-18T15:54:27.687156989+02:00"
+    description: Containerized log generator application for demo purposes
+    digest: 3defe6796c059d928a976a1aa7af30ed122c3bd1b92561ca9ebdf3583b893414
+    home: https://github.com/smarlhens/python-boilerplate
+    keywords:
+    - loggen
+    - logs
+    - generator
+    maintainers:
+    - email: smainklh@gmail.com
+      name: Smana
+    name: loggen
+    type: application
+    urls:
+    - https://smana.github.io/loggen/helm/loggen/loggen-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
+    appVersion: 0.1.0
+    created: "2025-05-18T15:54:27.686842332+02:00"
+    description: A secure, containerized log generator application.
+    digest: 7470413ee93f3f050cff84787f0bd048a3a72fffcc9207f0397d681af8b9a1b5
+    home: https://github.com/smarlhens/python-boilerplate
+    keywords:
+    - loggen
+    - logs
+    - generator
+    maintainers:
+    - email: your.email@example.com
+      name: Your Name
+    name: loggen
+    type: application
+    urls:
+    - https://smana.github.io/loggen/helm/loggen/loggen-0.1.0.tgz
+    version: 0.1.0
+generated: "2025-05-18T15:54:27.686493757+02:00"
