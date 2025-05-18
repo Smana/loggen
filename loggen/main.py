@@ -58,9 +58,9 @@ ERROR_LEVELS = ["info", "warning", "error"]
 
 # HTTP status code pools
 HTTP_CODES = {
-    "info": [200, 201, 202, 204],
-    "warning": [400, 401, 403, 404, 429],
-    "error": [500, 502, 503, 504],
+    "ok": [200, 201, 202, 204],
+    "client_error": [400, 401, 403, 404, 429],
+    "server_error": [500, 502, 503, 504],
 }
 
 
@@ -97,15 +97,13 @@ def random_request_time():
     return round(random.uniform(0.2, 1.5), 3)  # nosec
 
 def pick_error_level(error_rate):
-    # error_rate is the probability of an error (0-1)
-    # warning_rate is half of error_rate
     r = secrets.randbelow(10**9) / 10**9
-    if r < error_rate:
-        return "error"
-    elif r < error_rate * 2:
-        return "warning"
+    if r < error_rate / 2:
+        return "client_error"
+    elif r < error_rate:
+        return "server_error"
     else:
-        return "info"
+        return "ok"
 
 def pick_status_code(error_type):
     return secrets.choice(HTTP_CODES[error_type])
@@ -127,7 +125,7 @@ def generate_log_entry(error_rate, output_format, latency=0.0):
         log = (
             f"{remote_addr} {remote_user} [{time_local}] \"{request}\" "
             f"{status} {body_bytes_sent} \"{http_referer}\" "
-            f'"{http_user_agent}" "{country}" {request_time} {error_level}'
+            f'"{http_user_agent}" "{country}" {request_time}'
         )
         return log
     else:
@@ -142,7 +140,6 @@ def generate_log_entry(error_rate, output_format, latency=0.0):
             "http_user_agent": http_user_agent,
             "country": country,
             "request_time": request_time,
-            "level": error_level,
         }
         return json.dumps(log_dict)
 
