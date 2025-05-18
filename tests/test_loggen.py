@@ -68,3 +68,10 @@ def test_cli_invalid_format():
     result = runner.invoke(main, ['--format', 'invalid'])
     assert result.exit_code != 0
     assert 'Invalid value for' in result.output
+
+def test_request_time_in_json():
+    log = generate_log_entry(0.0, "json")
+    data = json.loads(log)
+    assert "request_time" in data
+    assert isinstance(data["request_time"], float)
+    assert 0.001 <= data["request_time"] <= 3.0

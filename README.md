@@ -6,14 +6,33 @@
 
 A configurable log generator for testing and benchmarking log pipelines. It generates random  logs in **webserver-style** format, making it ideal for **demos** and testing with logging solutions such as Loki, VictoriaLogs, and more.
 
+We simulate a log equivalent of what can be configured with the Nginx configuration
+
+```nginx
+# Example nginx log_format for loggen-style JSON logs
+log_format logger_json escape=json '{'
+    '"remote_addr":"$remote_addr",'
+    '"remote_user":"$remote_user",'
+    '"time_local":"$time_local",'
+    '"request":"$request",'
+    '"status":$status,'
+    '"body_bytes_sent":$body_bytes_sent,'
+    '"http_referer":"$http_referer",'
+    '"http_user_agent":"$http_user_agent",'
+    '"country":"$geoip2_data_country_code",'
+    '"request_time":$request_time,'
+    '"level":"$level"'
+'}';
+```
+
 Example:
 
 ```console
 loggen --sleep 0.5
-warning 111.189.30.118  [21/Apr/2025:16:30:14 ] "DELETE /about HTTP/1.1" 429 4150 "http://localhost/" "PostmanRuntime/7.28.4" "US"
-info 85.148.104.58  [07/May/2025:11:52:01 ] "GET /contact HTTP/1.1" 200 708 "https://github.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36" "RU"
-warning 63.143.32.40  [15/May/2025:15:48:35 ] "PATCH /products HTTP/1.1" 401 4492 "https://google.com/search?q=loggen" "curl/7.68.0" "FR"
-error 74.150.31.111  [04/May/2025:05:41:13 ] "POST /login HTTP/2" 504 1274 "http://example.com/previous_page" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36" "US"
+145.181.141.29 - [19/Apr/2025:09:24:13 ] "GET /login HTTP/1.1" 403 113 "https://google.com/search?q=loggen" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36" "JP" 1.05 warning
+94.75.137.82 - [03/May/2025:17:52:47 ] "PATCH /homepage HTTP/1.1" 400 2616 "https://github.com/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.1 Safari/605.1.15" "US" 1.464 warning
+104.155.196.123 - [14/May/2025:16:02:49 ] "GET /login HTTP/2" 200 2409 "http://localhost/" "PostmanRuntime/7.28.4" "RU" 1.019 info
+48.107.13.5 - [06/May/2025:21:26:22 ] "POST /products HTTP/1.1" 204 4425 "http://localhost/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.1 Safari/605.1.15" "BR" 1.182 info
 ...
 ```
 
@@ -21,9 +40,10 @@ or using JSON output
 
 ```console
 loggen --sleep 1 --error-rate 0.2 --format json
-{"level": "warning", "remote_addr": "204.222.22.250", "time_local": "10/May/2025:21:37:20 ", "request": "POST /login HTTP/1.1", "status": 404, "body_bytes_sent": 1757, "http_referer": "-", "http_user_agent": "curl/7.68.0", "country": "IN"}
-{"level": "error", "remote_addr": "223.85.90.31", "time_local": "03/May/2025:21:30:52 ", "request": "POST /homepage HTTP/2", "status": 502, "body_bytes_sent": 3822, "http_referer": "http://example.com/previous_page", "http_user_agent": "curl/7.68.0", "country": "IN"}
-{"level": "error", "remote_addr": "208.92.13.189", "time_local": "23/Apr/2025:17:35:17 ", "request": "DELETE /homepage HTTP/1.1", "status": 500, "body_bytes_sent": 1952, "http_referer": "-", "http_user_agent": "Mozilla/5.0 (Linux; Android 10; SM-G970F) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.91 Mobile Safari/537.36", "country": "RU"}
+loggen --sleep 1 --error-rate 0.2 --format json --latency 0.5
+{"remote_addr": "136.250.6.140", "remote_user": "-", "time_local": "13/May/2025:14:58:54 ", "request": "POST /products HTTP/1.1", "status": 204, "body_bytes_sent": 4431, "http_referer": "https://google.com/search?q=loggen", "http_user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36", "country": "BR", "request_time": 1.286, "level": "info"}
+{"remote_addr": "239.240.1.153", "remote_user": "-", "time_local": "21/Apr/2025:18:40:12 ", "request": "PUT /homepage HTTP/1.1", "status": 429, "body_bytes_sent": 2363, "http_referer": "-", "http_user_agent": "PostmanRuntime/7.28.4", "country": "DE", "request_time": 1.988, "level": "warning"}
+{"remote_addr": "139.242.228.192", "remote_user": "-", "time_local": "05/May/2025:00:25:38 ", "request": "PATCH /about HTTP/1.1", "status": 202, "body_bytes_sent": 4718, "http_referer": "-", "http_user_agent": "PostmanRuntime/7.28.4", "country": "DE", "request_time": 1.003, "level": "info"}
 ...
 ```
 

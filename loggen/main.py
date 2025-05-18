@@ -1,4 +1,5 @@
 import json
+import random
 import secrets
 import sys
 import time
@@ -91,6 +92,10 @@ def random_referer():
 def random_country():
     return secrets.choice(COUNTRY_CODES)
 
+def random_request_time():
+    # Simulate request time between 0.200 and 1.500 seconds
+    return round(random.uniform(0.2, 1.5), 3)  # nosec
+
 def pick_error_level(error_rate):
     # error_rate is the probability of an error (0-1)
     # warning_rate is half of error_rate
@@ -105,9 +110,10 @@ def pick_error_level(error_rate):
 def pick_status_code(error_type):
     return secrets.choice(HTTP_CODES[error_type])
 
-def generate_log_entry(error_rate, output_format):
+def generate_log_entry(error_rate, output_format, latency=0.0):
     error_level = pick_error_level(error_rate)
     remote_addr = random_ip()
+    remote_user = "-"  # Not used, but included for nginx compatibility
     time_local = random_time()
     request = random_request()
     status = pick_status_code(error_level)
@@ -115,18 +121,19 @@ def generate_log_entry(error_rate, output_format):
     http_referer = random_referer()
     http_user_agent = random_user_agent()
     country = random_country()
+    request_time = round(random_request_time() + latency, 3)
 
     if output_format == "raw":
         log = (
-            f"{error_level} {remote_addr}  [{time_local}] \"{request}\" "
+            f"{remote_addr} {remote_user} [{time_local}] \"{request}\" "
             f"{status} {body_bytes_sent} \"{http_referer}\" "
-            f'"{http_user_agent}" "{country}"'
+            f'"{http_user_agent}" "{country}" {request_time} {error_level}'
         )
         return log
     else:
         log_dict = {
-            "level": error_level,
             "remote_addr": remote_addr,
+            "remote_user": remote_user,
             "time_local": time_local,
             "request": request,
             "status": status,
@@ -134,6 +141,8 @@ def generate_log_entry(error_rate, output_format):
             "http_referer": http_referer,
             "http_user_agent": http_user_agent,
             "country": country,
+            "request_time": request_time,
+            "level": error_level,
         }
         return json.dumps(log_dict)
 
@@ -163,12 +172,18 @@ def generate_log_entry(error_rate, output_format):
     default=0,
     help='Number of logs to generate (default: 0 for infinite)'
 )
-def main(sleep, error_rate, output_format, count):
+@click.option(
+    '--latency',
+    type=float,
+    default=0.0,
+    help='Additional latency (in seconds) to add to request_time (default: 0)'
+)
+def main(sleep, error_rate, output_format, count, latency):
     """Continuous log generator."""
     try:
         i = 0
         while count == 0 or i < count:
-            log_entry = generate_log_entry(error_rate, output_format)
+            log_entry = generate_log_entry(error_rate, output_format, latency)
             print(log_entry, flush=True)
             if sleep > 0:
                 time.sleep(sleep)

@@ -1,14 +1,14 @@
 apiVersion: v2
 name: loggen
-version: 0.1.0
-appVersion: "0.1.0"
-description: A secure, containerized log generator application.
+version: 0.1.3
+appVersion: "0.1.3"
+description: A log generator for testing and benchmarking log pipelines.
 type: application
 keywords:
   - loggen
   - logs
   - generator
-home: https://github.com/smarlhens/python-boilerplate
+home: https://github.com/Smana/loggen
 maintainers:
-  - name: Your Name
-    email: your.email@example.com
+  - name: Smana
+    email: smainklh@gmail.com
