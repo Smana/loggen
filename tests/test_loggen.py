@@ -7,7 +7,7 @@ from click.testing import CliRunner
 from loggen import (
     generate_log_entry,
     main,
-    pick_error_type,
+    pick_error_level,
     pick_status_code,
 )
 
@@ -24,7 +24,7 @@ def test_generate_log_entry_json():
     log = generate_log_entry(0.0, "json")
     data = json.loads(log)
     assert isinstance(data, dict)
-    assert data["type"] == "info"
+    assert data["level"] == "info"
     assert "remote_addr" in data
     assert "request" in data
     assert "status" in data
@@ -33,20 +33,20 @@ def test_generate_log_entry_json():
     (0.0, "info"),
     (1.0, "error"),
 ])
-def test_pick_error_type_extremes(error_rate, expected):
+def test_pick_error_level_extremes(error_rate, expected):
     # With 0.0, always info; with 1.0, always error
     for _ in range(10):
-        assert pick_error_type(error_rate) == expected
+        assert pick_error_level(error_rate) == expected
 
-@pytest.mark.parametrize("error_type", ["info", "warning", "error"])
-def test_pick_status_code(error_type):
-    code = pick_status_code(error_type)
+@pytest.mark.parametrize("error_level", ["info", "warning", "error"])
+def test_pick_status_code(error_level):
+    code = pick_status_code(error_level)
     assert isinstance(code, int)
-    if error_type == "info":
+    if error_level == "info":
         assert code in [200, 201, 202, 204]
-    elif error_type == "warning":
+    elif error_level == "warning":
         assert code in [400, 401, 403, 404, 429]
-    elif error_type == "error":
+    elif error_level == "error":
         assert code in [500, 502, 503, 504]
 
 def test_cli_basic():

@@ -4,7 +4,28 @@
 
 # loggen
 
-A configurable log generator for testing and benchmarking log pipelines. It generates random  logs in webserver-style formats, making it ideal for demos and testing with logging solutions such as Loki, VictoriaLogs, and more.
+A configurable log generator for testing and benchmarking log pipelines. It generates random  logs in **webserver-style** format, making it ideal for **demos** and testing with logging solutions such as Loki, VictoriaLogs, and more.
+
+Example:
+
+```console
+loggen --sleep 0.5
+warning 111.189.30.118  [21/Apr/2025:16:30:14 ] "DELETE /about HTTP/1.1" 429 4150 "http://localhost/" "PostmanRuntime/7.28.4" "US"
+info 85.148.104.58  [07/May/2025:11:52:01 ] "GET /contact HTTP/1.1" 200 708 "https://github.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36" "RU"
+warning 63.143.32.40  [15/May/2025:15:48:35 ] "PATCH /products HTTP/1.1" 401 4492 "https://google.com/search?q=loggen" "curl/7.68.0" "FR"
+error 74.150.31.111  [04/May/2025:05:41:13 ] "POST /login HTTP/2" 504 1274 "http://example.com/previous_page" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36" "US"
+...
+```
+
+or using JSON output
+
+```console
+loggen --sleep 1 --error-rate 0.2 --format json
+{"level": "warning", "remote_addr": "204.222.22.250", "time_local": "10/May/2025:21:37:20 ", "request": "POST /login HTTP/1.1", "status": 404, "body_bytes_sent": 1757, "http_referer": "-", "http_user_agent": "curl/7.68.0", "country": "IN"}
+{"level": "error", "remote_addr": "223.85.90.31", "time_local": "03/May/2025:21:30:52 ", "request": "POST /homepage HTTP/2", "status": 502, "body_bytes_sent": 3822, "http_referer": "http://example.com/previous_page", "http_user_agent": "curl/7.68.0", "country": "IN"}
+{"level": "error", "remote_addr": "208.92.13.189", "time_local": "23/Apr/2025:17:35:17 ", "request": "DELETE /homepage HTTP/1.1", "status": 500, "body_bytes_sent": 1952, "http_referer": "-", "http_user_agent": "Mozilla/5.0 (Linux; Android 10; SM-G970F) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.91 Mobile Safari/537.36", "country": "RU"}
+...
+```
 
 ## Prerequisites
 

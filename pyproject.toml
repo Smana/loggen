@@ -11,7 +11,7 @@ name = "loggen"
 readme = "README.md"
 requires-python = ">=3.13,<3.14"
 urls = {homepage = "https://github.com/smana/loggen"}
-version = "0.1.1"
+version = "0.1.2"
 
 [project.optional-dependencies]
 dev = [
