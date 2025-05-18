@@ -29,10 +29,10 @@ Example:
 
 ```console
 loggen --sleep 0.5
-145.181.141.29 - [19/Apr/2025:09:24:13 ] "GET /login HTTP/1.1" 403 113 "https://google.com/search?q=loggen" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36" "JP" 1.05 warning
-94.75.137.82 - [03/May/2025:17:52:47 ] "PATCH /homepage HTTP/1.1" 400 2616 "https://github.com/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.1 Safari/605.1.15" "US" 1.464 warning
-104.155.196.123 - [14/May/2025:16:02:49 ] "GET /login HTTP/2" 200 2409 "http://localhost/" "PostmanRuntime/7.28.4" "RU" 1.019 info
-48.107.13.5 - [06/May/2025:21:26:22 ] "POST /products HTTP/1.1" 204 4425 "http://localhost/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.1 Safari/605.1.15" "BR" 1.182 info
+112.166.192.213 - [02/May/2025:11:21:10 ] "GET /api/data HTTP/2" 204 4627 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36" "FR" 0.94
+168.129.163.41 - [29/Apr/2025:04:23:46 ] "PUT /login HTTP/2" 201 3474 "https://github.com/" "PostmanRuntime/7.28.4" "GB" 1.489
+233.86.10.252 - [05/May/2025:11:18:41 ] "GET /homepage HTTP/2" 201 2407 "https://github.com/" "curl/7.68.0" "CN" 0.753
+187.4.53.252 - [20/Apr/2025:18:44:47 ] "GET /homepage HTTP/2" 204 3119 "https://github.com/" "curl/7.68.0" "RU" 0.662
 ...
 ```
 
@@ -40,10 +40,9 @@ or using JSON output
 
 ```console
 loggen --sleep 1 --error-rate 0.2 --format json
-loggen --sleep 1 --error-rate 0.2 --format json --latency 0.5
-{"remote_addr": "136.250.6.140", "remote_user": "-", "time_local": "13/May/2025:14:58:54 ", "request": "POST /products HTTP/1.1", "status": 204, "body_bytes_sent": 4431, "http_referer": "https://google.com/search?q=loggen", "http_user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36", "country": "BR", "request_time": 1.286, "level": "info"}
-{"remote_addr": "239.240.1.153", "remote_user": "-", "time_local": "21/Apr/2025:18:40:12 ", "request": "PUT /homepage HTTP/1.1", "status": 429, "body_bytes_sent": 2363, "http_referer": "-", "http_user_agent": "PostmanRuntime/7.28.4", "country": "DE", "request_time": 1.988, "level": "warning"}
-{"remote_addr": "139.242.228.192", "remote_user": "-", "time_local": "05/May/2025:00:25:38 ", "request": "PATCH /about HTTP/1.1", "status": 202, "body_bytes_sent": 4718, "http_referer": "-", "http_user_agent": "PostmanRuntime/7.28.4", "country": "DE", "request_time": 1.003, "level": "info"}
+{"remote_addr": "208.175.166.30", "remote_user": "-", "time_local": "19/Apr/2025:02:11:56 ", "request": "PUT /contact HTTP/1.1", "status": 202, "body_bytes_sent": 3368, "http_referer": "https://github.com/", "http_user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.1 Safari/605.1.15", "country": "AU", "request_time": 0.532}
+{"remote_addr": "133.120.216.25", "remote_user": "-", "time_local": "29/Apr/2025:22:42:16 ", "request": "POST /products HTTP/2", "status": 200, "body_bytes_sent": 1966, "http_referer": "https://google.com/search?q=loggen", "http_user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.1 Safari/605.1.15", "country": "CN", "request_time": 0.241}
+{"remote_addr": "151.116.92.8", "remote_user": "-", "time_local": "12/May/2025:17:14:49 ", "request": "GET /products HTTP/1.1", "status": 200, "body_bytes_sent": 3324, "http_referer": "-", "http_user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.1 Safari/605.1.15", "country": "JP", "request_time": 0.331}
 ...
 ```
 
@@ -88,9 +87,10 @@ python -m loggen.main --sleep 1 --error-rate 0.2 --format json
   ```
 - All options:
   - `--sleep FLOAT`   : Seconds to sleep between logs (default: 0)
-  - `--error-rate FLOAT` : Fraction of logs that are errors (default: 0.1)
+  - `--error-rate FLOAT` : Fraction of logs that are errors (default: 0.1). The error rate is split evenly between 4xx (client_error) and 5xx (server_error). For example, `--error-rate 0.2` means 10% client_error, 10% server_error, 80% successful (2xx/other) responses.
   - `--format [raw|json]` : Log output format (default: raw)
   - `--count INT`     : Number of logs to generate (default: 0 for infinite)
+  - `--latency FLOAT` : Additional latency (in seconds) to add to request_time (default: 0)
 
 ## Project Structure
 

@@ -14,39 +14,42 @@ from loggen import (
 
 def test_generate_log_entry_raw():
     log = generate_log_entry(0.0, "raw")
-    # Should contain info, an IP, a request, a status code, etc.
+    # Should contain an IP, a request, a status code, etc.
     assert isinstance(log, str)
-    assert re.search(r"info|warning|error", log)
     assert re.search(r"\d+\.\d+\.\d+\.\d+", log)
     assert '"' in log  # request is quoted
+    assert re.search(r"\s(2|4|5)\d{2}\s", log)  # status code
 
 def test_generate_log_entry_json():
     log = generate_log_entry(0.0, "json")
     data = json.loads(log)
     assert isinstance(data, dict)
-    assert data["level"] == "info"
     assert "remote_addr" in data
     assert "request" in data
     assert "status" in data
+    assert isinstance(data["status"], int)
+    assert 200 <= data["status"] < 600
 
-@pytest.mark.parametrize("error_rate,expected", [
-    (0.0, "info"),
-    (1.0, "error"),
+@pytest.mark.parametrize("error_rate,expected_status_range", [
+    (0.0, range(200, 300)),  # Only 2xx (ok)
+    (1.0, list(range(400, 500)) + list(range(500, 600))),  # Only 4xx or 5xx (errors)
 ])
-def test_pick_error_level_extremes(error_rate, expected):
-    # With 0.0, always info; with 1.0, always error
-    for _ in range(10):
-        assert pick_error_level(error_rate) == expected
+def test_pick_error_level_extremes(error_rate, expected_status_range):
+    # With 0.0, always 2xx; with 1.0, always 4xx or 5xx
+    for _ in range(20):
+        level = pick_error_level(error_rate)
+        code = pick_status_code(level)
+        assert code in expected_status_range
 
-@pytest.mark.parametrize("error_level", ["info", "warning", "error"])
+@pytest.mark.parametrize("error_level", ["ok", "client_error", "server_error"])
 def test_pick_status_code(error_level):
     code = pick_status_code(error_level)
     assert isinstance(code, int)
-    if error_level == "info":
+    if error_level == "ok":
         assert code in [200, 201, 202, 204]
-    elif error_level == "warning":
+    elif error_level == "client_error":
         assert code in [400, 401, 403, 404, 429]
-    elif error_level == "error":
+    elif error_level == "server_error":
         assert code in [500, 502, 503, 504]
 
 def test_cli_basic():
