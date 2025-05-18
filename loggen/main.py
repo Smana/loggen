@@ -53,7 +53,7 @@ COUNTRY_CODES = [
     "JP",
     "AU",
 ]
-ERROR_TYPES = ["info", "warning", "error"]
+ERROR_LEVELS = ["info", "warning", "error"]
 
 # HTTP status code pools
 HTTP_CODES = {
@@ -91,7 +91,7 @@ def random_referer():
 def random_country():
     return secrets.choice(COUNTRY_CODES)
 
-def pick_error_type(error_rate):
+def pick_error_level(error_rate):
     # error_rate is the probability of an error (0-1)
     # warning_rate is half of error_rate
     r = secrets.randbelow(10**9) / 10**9
@@ -106,26 +106,26 @@ def pick_status_code(error_type):
     return secrets.choice(HTTP_CODES[error_type])
 
 def generate_log_entry(error_rate, output_format):
-    error_type = pick_error_type(error_rate)
+    error_level = pick_error_level(error_rate)
     remote_addr = random_ip()
     time_local = random_time()
     request = random_request()
-    status = pick_status_code(error_type)
+    status = pick_status_code(error_level)
     body_bytes_sent = random_bytes()
     http_referer = random_referer()
     http_user_agent = random_user_agent()
-    geoip2_country_code = random_country()
+    country = random_country()
 
     if output_format == "raw":
         log = (
-            f"{error_type} {remote_addr}  [{time_local}] \"{request}\" "
+            f"{error_level} {remote_addr}  [{time_local}] \"{request}\" "
             f"{status} {body_bytes_sent} \"{http_referer}\" "
-            f'"{http_user_agent}" "{geoip2_country_code}"'
+            f'"{http_user_agent}" "{country}"'
         )
         return log
     else:
         log_dict = {
-            "type": error_type,
+            "level": error_level,
             "remote_addr": remote_addr,
             "time_local": time_local,
             "request": request,
@@ -133,7 +133,7 @@ def generate_log_entry(error_rate, output_format):
             "body_bytes_sent": body_bytes_sent,
             "http_referer": http_referer,
             "http_user_agent": http_user_agent,
-            "geoip2_country_code": geoip2_country_code,
+            "country": country,
         }
         return json.dumps(log_dict)
 
